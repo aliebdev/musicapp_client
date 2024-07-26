@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/common/widgets/loader.dart';
 import '../../../../core/theme/app_pallete.dart';
 import '../../../../core/utils/app_snackbar.dart';
+import '../../../../core/widgets/custom_field.dart';
+import '../../../../core/widgets/loader.dart';
 import '../../viewmodel/auth_viewmodel.dart';
-import '../widgets/auth_field.dart';
 import '../widgets/auth_gradient_button.dart';
 import 'login_page.dart';
 
@@ -70,19 +70,19 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                         ),
                       ),
                       const SizedBox(height: 30),
-                      AuthField(
+                      CustomField(
                         initValue: name,
                         hintText: "Name",
                         onSaved: (value) => name = value ?? "",
                       ),
                       const SizedBox(height: 15),
-                      AuthField(
+                      CustomField(
                         initValue: email,
                         hintText: "Email",
                         onSaved: (value) => email = value ?? "",
                       ),
                       const SizedBox(height: 15),
-                      AuthField(
+                      CustomField(
                         initValue: password,
                         hintText: "Password",
                         obscureText: true,
