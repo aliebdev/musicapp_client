@@ -19,13 +19,15 @@ class SignUpPage extends ConsumerStatefulWidget {
 
 class _SignUpPageState extends ConsumerState<SignUpPage> {
   final formKey = GlobalKey<FormState>();
-  late String name;
-  late String email;
-  late String password;
+  late String name = "";
+  late String email = "";
+  late String password = "";
 
   @override
   Widget build(BuildContext context) {
-    final bool isLoading = ref.watch(authViewModelProvider)?.isLoading == true;
+    final bool isLoading = ref.watch(authViewModelProvider.select(
+      (value) => value?.isLoading == true,
+    ));
     ref.listen(
       authViewModelProvider,
       (_, next) {

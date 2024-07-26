@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/common/widgets/loader.dart';
 import '../../../../core/theme/app_pallete.dart';
 import '../../../../core/utils/app_snackbar.dart';
+import '../../../home/view/pages/home_page.dart';
 import '../../viewmodel/auth_viewmodel.dart';
 import '../widgets/auth_field.dart';
 import '../widgets/auth_gradient_button.dart';
@@ -24,13 +25,19 @@ class LoginPageState extends ConsumerState<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = ref.watch(authViewModelProvider)?.isLoading == true;
+    final bool isLoading = ref.watch(authViewModelProvider.select(
+      (value) => value?.isLoading == true,
+    ));
     ref.listen(
       authViewModelProvider,
       (_, next) {
         next?.when(
           data: (data) {
-            // Navigator.push(context, LoginPage.route());
+            Navigator.pushAndRemoveUntil(
+              context,
+              HomePage.route(),
+              (route) => false,
+            );
           },
           error: (error, stackTrace) {
             AppSnackbar.showSnackabar(

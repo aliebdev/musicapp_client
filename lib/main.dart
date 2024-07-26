@@ -1,25 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'core/providers/current_user_notifier.dart';
 import 'core/theme/theme.dart';
 import 'features/auth/view/pages/signup_page.dart';
+import 'features/auth/viewmodel/auth_viewmodel.dart';
+import 'features/home/view/pages/home_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final container = ProviderContainer();
+  final notifier = container.read(authViewModelProvider.notifier);
+  await notifier.initSharedPreferences();
+  await notifier.getData();
+
   runApp(
-    const ProviderScope(child: MyApp()),
+    UncontrolledProviderScope(
+      container: container,
+      child: const MyApp(),
+    ),
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentUser = ref.watch(currentUserNotifierProvider);
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Music App',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.dark,
-      home: const SignUpPage(),
+      home: currentUser == null ? const SignUpPage() : const HomePage(),
     );
   }
 }
