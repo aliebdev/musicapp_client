@@ -1,5 +1,6 @@
-import 'package:client/core/theme/app_pallete.dart';
 import 'package:flutter/material.dart';
+
+import 'app_pallete.dart';
 
 class AppTheme {
   static _border([Color color = Pallete.borderColor]) => OutlineInputBorder(
@@ -18,6 +19,9 @@ class AppTheme {
           border: _border(),
           focusedBorder: _border(Pallete.gradient2),
           errorBorder: _border(Pallete.errorColor),
+        ),
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor: Pallete.backgroundColor,
         ),
       );
 }

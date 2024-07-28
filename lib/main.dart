@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'core/providers/current_user_notifier.dart';
 import 'core/theme/theme.dart';
 import 'features/auth/view/pages/signup_page.dart';
 import 'features/auth/viewmodel/auth_viewmodel.dart';
-import 'features/home/view/pages/upload_song_page.dart';
+import 'features/home/view/pages/home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  final dir = await getApplicationDocumentsDirectory();
+  Hive.defaultDirectory = dir.path;
+
   final container = ProviderContainer();
   final notifier = container.read(authViewModelProvider.notifier);
   await notifier.initSharedPreferences();
@@ -32,7 +37,7 @@ class MyApp extends ConsumerWidget {
       title: 'Music App',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.dark,
-      home: currentUser == null ? const SignUpPage() : const UploadSongPage(),
+      home: currentUser == null ? const SignUpPage() : const HomePage(),
     );
   }
 }

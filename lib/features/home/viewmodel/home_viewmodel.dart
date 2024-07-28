@@ -1,21 +1,39 @@
 import 'dart:io';
 import 'dart:ui';
 
-import 'package:client/core/providers/current_user_notifier.dart';
-import 'package:client/core/utils/app_utils.dart';
-import 'package:client/features/home/repositories/home_repository.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import '../../../core/providers/current_user_notifier.dart';
+import '../../../core/utils/app_utils.dart';
+import '../model/song_model.dart';
+import '../repositories/home_local_repository.dart';
+import '../repositories/home_repository.dart';
 
 part 'home_viewmodel.g.dart';
 
 @riverpod
+Future<List<SongModel>> getAllSongs(GetAllSongsRef ref) async {
+  final token = ref.watch(currentUserNotifierProvider)!.token;
+  final res = await ref.watch(homeRepositoryProvider).getAllSongs(
+        token: token,
+      );
+
+  return switch (res) {
+    Left(value: final l) => throw l.message,
+    Right(value: final r) => r,
+  };
+}
+
+@riverpod
 class HomeViewModel extends _$HomeViewModel {
   late HomeRepository _homeRepository;
+  late HomeLocalRepository _homeLocalRepository;
 
   @override
   AsyncValue? build() {
     _homeRepository = ref.watch(homeRepositoryProvider);
+    _homeLocalRepository = ref.watch(homeLocalRepositoryProvider);
     return null;
   }
 
@@ -44,5 +62,9 @@ class HomeViewModel extends _$HomeViewModel {
     };
 
     print(val);
+  }
+
+  List<SongModel> getRecentlyPlayedSongs() {
+    return _homeLocalRepository.loadSongs();
   }
 }
