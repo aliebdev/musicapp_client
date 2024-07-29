@@ -6,7 +6,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/constants/server_constants.dart';
 import '../../../core/errors/failure.dart';
-import '../model/user_model.dart';
+import '../../../core/models/user_model.dart';
 
 part 'auth_remote_repository.g.dart';
 

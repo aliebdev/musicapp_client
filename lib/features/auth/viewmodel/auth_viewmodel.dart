@@ -3,7 +3,7 @@ import 'package:client/core/providers/current_user_notifier.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../model/user_model.dart';
+import '../../../core/models/user_model.dart';
 import '../repositories/auth_local_repository.dart';
 import '../repositories/auth_remote_repository.dart';
 

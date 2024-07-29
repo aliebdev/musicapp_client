@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/providers/current_song_notifier.dart';
+import '../../viewmodel/home_viewmodel.dart';
 
 class MusicPlayer extends ConsumerWidget {
   const MusicPlayer({
@@ -21,7 +22,7 @@ class MusicPlayer extends ConsumerWidget {
         gradient: LinearGradient(
           colors: [
             AppUtils.hexToColor(song.hexCode),
-            Colors.black,
+            Pallete.transparentColor,
           ],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
@@ -62,6 +63,7 @@ class MusicPlayer extends ConsumerWidget {
                   ),
                 ),
               ),
+              const SizedBox(height: 20),
               Flexible(
                 flex: 4,
                 child: Column(
@@ -92,7 +94,11 @@ class MusicPlayer extends ConsumerWidget {
                           ),
                         ),
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            ref
+                                .read(homeViewModelProvider.notifier)
+                                .favSong(songId: song.id);
+                          },
                           icon: const Icon(
                             CupertinoIcons.heart,
                             color: Pallete.whiteColor,

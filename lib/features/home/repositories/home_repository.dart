@@ -80,4 +80,59 @@ class HomeRepository {
       return Left(AppFailure(e.toString()));
     }
   }
+
+  Future<Either<AppFailure, bool>> favSong({
+    required String token,
+    required String songId,
+  }) async {
+    try {
+      final response = await http.post(
+        Uri.parse("${ServerConstants.serverURL}/song/favorite"),
+        body: jsonEncode({"song_id": songId}),
+        headers: {
+          'Content-Type': 'application/json',
+          'x-auth-token': token,
+        },
+      );
+
+      var decodedResponse = jsonDecode(response.body);
+
+      if (response.statusCode != 200) {
+        decodedResponse = decodedResponse as Map<String, dynamic>;
+        return Left(AppFailure(decodedResponse["details"]));
+      }
+
+      return Right(decodedResponse['message']);
+    } catch (e) {
+      return Left(AppFailure(e.toString()));
+    }
+  }
+
+  Future<Either<AppFailure, List<SongModel>>> getFavSongs({
+    required String token,
+  }) async {
+    try {
+      final response = await http.get(
+          Uri.parse("${ServerConstants.serverURL}/song/list/favorites"),
+          headers: {
+            'Content-Type': 'application/json',
+            'x-auth-token': token,
+          });
+
+      var decodedResponse = jsonDecode(response.body);
+
+      if (response.statusCode != 200) {
+        decodedResponse = decodedResponse as Map<String, dynamic>;
+        return Left(AppFailure(decodedResponse["details"]));
+      }
+
+      return Right(
+        (decodedResponse as List)
+            .map((json) => SongModel.fromMap(json['song']))
+            .toList(),
+      );
+    } catch (e) {
+      return Left(AppFailure(e.toString()));
+    }
+  }
 }

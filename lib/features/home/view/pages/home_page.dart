@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -5,6 +6,7 @@ import '../../../../core/theme/app_pallete.dart';
 import '../widgets/music_slab.dart';
 import 'library_page.dart';
 import 'songs_page.dart';
+import 'upload_song_page.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   static route() => MaterialPageRoute(
@@ -21,6 +23,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   final pages = [
     const SongsPage(),
     const LibraryPage(),
+    const UploadSongPage(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -64,6 +67,11 @@ class _HomePageState extends ConsumerState<HomePage> {
             ),
             // activeIcon: Image.asset('assets/images/library.png'),
             label: 'Library',
+          ),
+          const BottomNavigationBarItem(
+            icon: Icon(CupertinoIcons.add_circled),
+            activeIcon: Icon(CupertinoIcons.add_circled_solid),
+            label: 'Upload',
           ),
         ],
       ),

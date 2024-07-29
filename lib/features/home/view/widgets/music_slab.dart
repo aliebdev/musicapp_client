@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/providers/current_song_notifier.dart';
+import '../../../../core/providers/current_user_notifier.dart';
 import '../../../../core/theme/app_pallete.dart';
 import '../../../../core/utils/app_utils.dart';
+import '../../viewmodel/home_viewmodel.dart';
 import 'music_player.dart';
 
 class MusicSlab extends ConsumerWidget {
@@ -14,10 +16,18 @@ class MusicSlab extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentSong = ref.watch(currentSongNotifierProvider);
     final songNotifier = ref.read(currentSongNotifierProvider.notifier);
-
+    final userFavorites = ref.watch(
+      currentUserNotifierProvider.select((value) => value!.favorites),
+    );
     if (currentSong == null) {
       return const SizedBox.shrink();
     }
+    bool isFavorite = userFavorites
+        .where(
+          (element) => element.song_id == currentSong.id,
+        )
+        .toList()
+        .isNotEmpty;
     return GestureDetector(
       onTap: () => Navigator.push(
         context,
@@ -91,9 +101,15 @@ class MusicSlab extends ConsumerWidget {
                 Row(
                   children: [
                     IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        CupertinoIcons.heart,
+                      onPressed: () {
+                        ref
+                            .read(homeViewModelProvider.notifier)
+                            .favSong(songId: currentSong.id);
+                      },
+                      icon: Icon(
+                        isFavorite
+                            ? CupertinoIcons.heart_fill
+                            : CupertinoIcons.heart,
                         color: Pallete.whiteColor,
                       ),
                     ),
